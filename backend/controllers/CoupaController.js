@@ -2,6 +2,8 @@ const { raw } = require("express");
 const CoupaService = require("../class/CoupaService");
 const { isAxiosError } = require("axios");
 const Ticket = require("../models/TicketModel");
+const EmailModel = require("../models/EmailModelv2");
+const db = require("../config/connection");
 
 exports.getData = async (req, res) => {
     try {
@@ -299,4 +301,24 @@ exports.submitVendorCoupa = async (req, res) => {
     // finally {
     //     await MutexModel.Unlock(coupa_id);
     // }
+};
+
+exports.sendEmail = async (req, res) => {
+    const { ven_detail, ven_banks } = req.body;
+    if (!ven_detail) {
+        return res.status(400).send({ message: "ven_detail is missing" });
+    }
+
+    const client = await db.connect();
+    try {
+        const data = await EmailModel.coupaEmail(client, ven_detail, ven_banks);
+        res.status(200).send({ message: "Email sent successfully", data });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({
+            message: error?.message ?? "Internal server error",
+        });
+    } finally {
+        client.release();
+    }
 };
