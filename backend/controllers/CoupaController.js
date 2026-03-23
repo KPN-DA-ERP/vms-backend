@@ -4,6 +4,7 @@ const { isAxiosError } = require("axios");
 const Ticket = require("../models/TicketModel");
 const EmailModel = require("../models/EmailModelv2");
 const db = require("../config/connection");
+const Coupa = require("../models/CoupaModel");
 
 exports.getData = async (req, res) => {
     try {
@@ -279,14 +280,13 @@ exports.updateVendor = async (req, res) => {
 };
 
 exports.submitVendorCoupa = async (req, res) => {
-    const { coupa_id, ven_detail, ven_banks } = req.body;
+    const { ven_detail, ven_banks } = req.body;
     try {
-        const data = await Ticket.submitVendorCoupa({
-            session: req.cookies,
+        const data = await Coupa.submitVendorCoupa({
             ven_detail,
             ven_banks,
         });
-        if (!data) throw error;
+        if (!data) throw new Error("No data returned from submitVendorCoupa");
         res.status(200).send(data);
     } catch (error) {
         console.error(error);
@@ -298,9 +298,6 @@ exports.submitVendorCoupa = async (req, res) => {
             message,
         });
     }
-    // finally {
-    //     await MutexModel.Unlock(coupa_id);
-    // }
 };
 
 exports.sendEmail = async (req, res) => {

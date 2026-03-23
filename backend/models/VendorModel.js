@@ -162,7 +162,7 @@ const Vendor = {
             [q, value] = crud.insertItem("vendor", detail, "*");
             console.log(q, value);
             const submit = await client.query(q, value);
-            console.log(submit);
+            // console.log(submit);
             return submit;
         } catch (err) {
             console.log(err);
@@ -527,7 +527,6 @@ const Vendor = {
             for (let bank of banks) {
                 method = bank.method;
                 const payload = {
-                    bankv_id: "",
                     ven_id: ven_id,
                     bank_id: bank.bank_id,
                     bank_acc: bank.bank_acc,
@@ -537,7 +536,7 @@ const Vendor = {
                 };
                 switch (method) {
                     case "insert":
-                        payload.bankv_id = bank.id ? bank.id : uuid.uuid();
+                        payload.bankv_id = bank.id;
                         [q, val] = crud.insertItem("VEN_BANK", payload);
                         promises.push(client.query(q, val));
                         break;
