@@ -533,6 +533,7 @@ const Vendor = {
                     country: bank.bank_country ?? null,
                     bank_curr: bank.bank_curr,
                     acc_hold: bank.acc_hold,
+                    acc_name: bank.acc_name,
                 };
                 switch (method) {
                     case "insert":
@@ -549,7 +550,7 @@ const Vendor = {
                 }
             }
             const returnPromise = await Promise.all(promises);
-            console.log(returnPromise);
+            // console.log(returnPromise);
             return returnPromise;
         } catch (error) {
             console.error(error.stack);
