@@ -2203,6 +2203,47 @@ const Vendor = {
         }
     },
 
+    async allVerified() {
+        const client = await db.connect();
+        try {
+            const query = `
+            select v.ven_id as vendor_id, v.name_1 as vendor_name,v.npwp  as npwp, v.nitku as NITKU,    v.email, v.coupa_id  as coupa_ven_id, v.description as description, v.ven_code as vendor_code, v.is_active, v.ven_group as vendor_group, v.ven_acc as vendor_account, v.ven_type as vendor_type, v.purch_org as purchasing_organization, v.postal,v.postal_npwp,v.postal_sppkp, v.city,v.country,v.ppn_type, v.is_pkp,v.nama_direktur,v.nama_pic,v.pic_title,v.email_pic,v.email_fin as email_finance,
+             CONCAT(
+                    COALESCE(v.street, ''), ' ',
+                    COALESCE(v.street2, ''), ' ',
+                    COALESCE(v.street3, ''), ' ',
+                    COALESCE(v.street4, '')
+                ) AS street,
+                 CONCAT(
+                    COALESCE(v.street_npwp, ''), ' ',
+                    COALESCE(v.street2_npwp, ''), ' ',
+                    COALESCE(v.street3_npwp, ''), ' ',
+                    COALESCE(v.street4_npwp, '')
+                ) AS street_npwp,
+                CONCAT(
+                    COALESCE(v.street_sppkp, ''), ' ',
+                    COALESCE(v.street2_sppkp, ''), ' ',
+                    COALESCE(v.street3_sppkp, ''), ' ',
+                    COALESCE(v.street4_sppkp, '')
+                ) AS street_sppkp
+                from vendor v where is_verif = 1 AND is_pushsap IS TRUE
+                    `;
+
+            // const query = `SELECT * FROM vendor where is_verif = 1 AND is_pushsap IS TRUE LIMIT 10`;
+
+            const result = await client.query(query);
+            return {
+                count: result.rowCount,
+                data: result.rows,
+            };
+        } catch (err) {
+            console.error("Error fetching verified vendors:", err);
+            throw err;
+        } finally {
+            client.release();
+        }
+    },
+
     // async UpdateVendorData(ticket_id, updated_data) {
     //     try {
     //         const client = await db.connect() ;
