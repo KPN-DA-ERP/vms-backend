@@ -17,19 +17,17 @@ const apiAuth = (req, res, next) => {
         username !== process.env.BASIC_AUTH_USER ||
         password !== process.env.BASIC_AUTH_PASS
     ) {
-        return res
-            .status(401)
-            .json({ message: "Invalid credentials" });
+        return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const { apiKey } = req.body;
-    if (!apiKey) {
-        return res.status(401).json({ message: "API key is required in body" });
-    }
+    // const { apiKey } = req.body;
+    // if (!apiKey) {
+    //     return res.status(401).json({ message: "API key is required in body" });
+    // }
 
-    if (apiKey !== process.env.API_KEY) {
-        return res.status(403).json({ message: "Invalid API key" });
-    }
+    // if (apiKey !== process.env.API_KEY) {
+    //     return res.status(403).json({ message: "Invalid API key" });
+    // }
 
     next();
 };
