@@ -2,7 +2,8 @@ const Vendor = require("../models/VendorModel");
 
 exports.getData = async (req, res) => {
     try {
-        const data = await Vendor.allVerified();
+        const type = req.query.type;
+        const data = await Vendor.allVerified(type);
         res.status(200).json(data);
     } catch (error) {
         console.error(error);
