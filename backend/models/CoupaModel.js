@@ -74,7 +74,7 @@ const Coupa = {
         console.log(code);
         try {
             const result = await client.query(
-                `SELECT 
+                `SELECT
                     v.*,
                     json_agg(vb.*) AS banks
                 FROM vendor v
